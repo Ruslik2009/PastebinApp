@@ -1,0 +1,91 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:PastebinApp.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="PastebinApp.MainWindow"
+        Title="PastebinApp"
+        Width="400"
+        Height="550"
+        MinWidth="400"
+        MinHeight="550"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <SplitView  x:Name="SplitView"
+                    IsPaneOpen="false"
+                    DisplayMode="CompactInline" 
+                    OpenPaneLength="200"
+                    CompactPaneLength="0"
+                    PaneBackground="#1565C0">
+
+            <SplitView.Pane>
+                <StackPanel Spacing="5"
+                            Margin="5 60 5 5">
+
+                    <ListBox >
+                        <ListBoxItem >
+                            <StackPanel PointerPressed="HomeItem_PointerPressed" HorizontalAlignment="Stretch" Background="Transparent" Spacing="15" Orientation="Horizontal">
+                                <PathIcon Data="{StaticResource home}" Foreground="White"/>
+                                <TextBlock Text="Home" FontSize="15" FontWeight="Bold" Foreground="White" />
+                            </StackPanel>
+                        </ListBoxItem> 
+                        <!-- <ListBoxItem>
+                            <StackPanel PointerPressed="AccountItem_PointerPressed" HorizontalAlignment="Stretch" Background="Transparent" Spacing="15" Orientation="Horizontal">
+                                <PathIcon Data="{StaticResource person}"/>
+                                <TextBlock Text="Account" FontSize="15" FontWeight="Bold"/>
+                            </StackPanel>
+                        </ListBoxItem>  -->
+
+                        <ListBoxItem>
+                            <StackPanel PointerPressed="CreatePostItem_PointerPressed" HorizontalAlignment="Stretch" Background="Transparent" Spacing="15" Orientation="Horizontal" >
+                                <PathIcon Data="{StaticResource paste_add}" Foreground="White"/>
+                                <TextBlock Text="Create new paste" FontSize="15" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                        </ListBoxItem> 
+
+                        <ListBoxItem > 
+                            <StackPanel PointerPressed="ExitItem_PointerPressed" HorizontalAlignment="Stretch" Background="Transparent" Spacing="15" Orientation="Horizontal">
+                                <PathIcon Data="{StaticResource exit}" Foreground="White"/>
+                                <TextBlock Text="Exit" FontSize="15" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                        </ListBoxItem> 
+                        <!-- -->
+                    </ListBox>
+
+                </StackPanel>
+            </SplitView.Pane>
+
+            <SplitView.Content>
+                <Grid Background="#1E1E1E">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/> <!-- Навигатор -->
+                        <RowDefinition Height="*"/> <!-- Основное содержимое -->
+                    </Grid.RowDefinitions>
+
+
+                    <!-- Навигатор -->
+                    <controls:NavigationBar x:Name="NavBar" Grid.Row="0"/>
+
+
+
+                    <!-- Основное содержимое для форм -->
+                    <ContentControl x:Name="MainContent" Grid.Row="1"/>
+
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+        
+        <Button Width="45" Height="45" 
+                VerticalAlignment="Top" 
+                HorizontalAlignment="Left"
+                Margin="5"
+                Background="Transparent"
+                ZIndex="100"
+                Click="ToggleMenu_Click">
+                <PathIcon x:Name="MenuIcon" 
+                        Data="{StaticResource 3line}"/>
+        </Button>
+    </Grid>
+</Window>

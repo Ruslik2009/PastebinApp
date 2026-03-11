@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PastebinApp.LoginView">
+    
+    <StackPanel VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="300">
+
+        <TextBlock Text="Login" Classes="tbTitleText"/>
+
+        <TextBlock Text="Username"
+                   Foreground="#BBBBBB"
+                   Margin="0,0,0,5"/>
+
+        <TextBox x:Name="UsernameBox"/>
+
+        <TextBlock Text="Password"
+                   Foreground="#BBBBBB"
+                   Margin="0,15,0,5"/>
+        
+        <TextBox x:Name="PasswordBox"
+                 PasswordChar="*"/>
+                 
+        <TextBlock x:Name="ErrorBlock"
+                   Foreground="#ff3333"
+                   Margin="0,3,0,0"/>
+
+        <StackPanel HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Margin="0,3,0,0">
+
+            <TextBlock Text="Don't have an account? "
+                       Foreground="#BBBBBB"/>
+
+            <TextBlock x:Name="tbSignUp"
+                       PointerPressed="tbSignUp_PointerPressed"
+                       Text="Sign up"
+                       Classes="tbLink"/>
+        </StackPanel>
+
+        <Button x:Name="LoginButton"
+                Click="LoginButton_Click"
+                Content="Login"/>  
+
+    </StackPanel>
+</UserControl>

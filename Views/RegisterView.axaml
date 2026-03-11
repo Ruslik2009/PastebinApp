@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PastebinApp.RegisterView">
+    
+    <StackPanel VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="300">
+
+        <TextBlock Text="Create Account"
+                   Classes="tbTitleText"/>
+
+        <TextBlock Text="Username"
+                   Foreground="#BBBBBB"
+                   Margin="0,0,0,5"/>
+        
+        <TextBox x:Name="UsernameBox"/>
+
+        <TextBlock Text="Password"
+                   Foreground="#BBBBBB"
+                   Margin="0,15,0,5"/>
+        
+        <TextBox x:Name="PasswordBox"
+                 PasswordChar="*"/>
+
+        <TextBlock Text="Confirm password"
+                   Foreground="#BBBBBB"
+                   Margin="0,15,0,5"/>
+        
+        <TextBox x:Name="ConfirmPasswordBox"
+                 PasswordChar="*"/>
+
+
+        <TextBlock x:Name="ErrorBlock"
+                   Foreground="#ff3333"
+                   Margin="0,3,0,0"/>
+
+        <StackPanel HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Margin="0,3,0,0">
+
+            <TextBlock Text="Have an account? "
+                       Foreground="#BBBBBB"/>
+
+            <TextBlock x:Name="tbSignIn"
+                       PointerPressed="tbSignIn_PointerPressed"
+                       Text="Sign in"
+                       Classes="tbLink"/>
+        </StackPanel>
+
+        <Button x:Name="CreateButton"
+                Content="Create"
+                Click="CreateAccountButton_Click"/>
+
+    </StackPanel>
+</UserControl>

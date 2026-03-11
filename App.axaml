@@ -1,0 +1,21 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:PastebinApp"
+             x:Class="PastebinApp.App"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="Styles/Styles.axaml"/> <!-- Стили -->
+        <StyleInclude Source="Assets/Icons.axaml"/> <!--  Иконки -->
+    </Application.Styles>
+
+
+   <Application.Resources>
+        <ResourceDictionary>
+            <local:ReactionColorConverter x:Key="ReactionColorConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>

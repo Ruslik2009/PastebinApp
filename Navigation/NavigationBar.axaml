@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PastebinApp.Controls.NavigationBar"
+             Height="60">
+    
+ 
+
+        <Border Background="#1565C0" 
+                BorderThickness="0,0,0,3" 
+                BorderBrush="#1E88E5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>     <!-- logo-->
+                </Grid.ColumnDefinitions>
+                
+                    <!-- logo-->
+                    <TextBlock  Grid.Column="1"
+                                Text="Pastebin"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="65,0,15,0"/>
+                
+            </Grid>
+        </Border> 
+</UserControl>

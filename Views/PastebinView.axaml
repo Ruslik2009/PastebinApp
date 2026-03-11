@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PastebinApp.PastebinView">
+    
+    <DockPanel Margin="20">
+        <StackPanel Margin="0,0,10,0" VerticalAlignment="Top">
+            <TextBlock Text="PASTEBIN" Margin="0,0,0,20" />  
+
+            <TextBox x:Name="ContentBox"
+                     Watermark="Enter your text"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     Height="300"
+                     Margin="0,0,0,10"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
+                <TextBox x:Name="UrlBox" 
+                         Watermark="url" 
+                         IsReadOnly="True" 
+                         Focusable="True" 
+                         Height="40"
+                         Width="550"
+                         Margin="0,10,10,0"/>
+
+                <Button Content="Copy"
+                        Click="CopyButton_Click" 
+                        Height="40" Margin="0,10,0,0"/> 
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <!-- Публичный/приватный -->
+                <CheckBox x:Name="PublicCheckBox" 
+                        Content="Public post"
+                        IsChecked="True"
+                        Margin="0,0,5,0"/>
+    
+                    <!-- Когда удалить -->
+                <ComboBox x:Name="DeleteComboBox"
+                          Background="#1e1e1e"
+                          SelectedIndex="0">
+                    <ComboBoxItem Tag="0">Never delete</ComboBoxItem>
+                    <ComboBoxItem Tag="1">After 1 day</ComboBoxItem>
+                    <ComboBoxItem Tag="7">After 1 week</ComboBoxItem>
+                    <ComboBoxItem Tag="30">After 1 month</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,10,0">
+                <Button Content="Create new paste" Click="CreatePasteButton_Click"/> 
+                <Button Content="Close"            Click="CloseButton_Click"/>                  
+            </StackPanel>
+        </StackPanel>         
+    </DockPanel>
+</UserControl>
