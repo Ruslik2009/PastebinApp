@@ -7,7 +7,7 @@
 ## 📸 Интерфейс приложения
 
 
-| Авторизация | Создание пасты | Поиск и просмотр |
+| Авторизация | Создание поста | Поиск и просмотр |
 | :---: | :---: | :---: |
 | <img src="https://github.com/user-attachments/assets/83939e89-d327-42b5-88c0-36038734d3ff" width="100%" /> | <img src="https://github.com/user-attachments/assets/a038f1d3-16b4-49b7-bc30-1a0ca1ed1b9e" width="100%" /> | <img width="100%"  alt="SearchPost" src="https://github.com/user-attachments/assets/2c85ecc7-03e0-40fb-b752-247a41682370" />|
 
