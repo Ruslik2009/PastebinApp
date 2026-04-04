@@ -313,4 +313,102 @@ public class DatabaseService
     }
 
 
+    // Методы для получения информации о пользователе
+    public async Task<UserProfile?> GetUserProfileAsync(int userId)
+    {
+        try
+        {
+            await connection.OpenAsync();
+            
+            using var cmd = new SqliteCommand(@"SELECT id, username, created 
+                                                FROM users 
+                                                WHERE id = @userId", connection);
+            
+            cmd.Parameters.AddWithValue("@userId", userId);
+            
+            using var reader = await cmd.ExecuteReaderAsync();
+            
+            if (await reader.ReadAsync())
+            {
+                return new UserProfile
+                {
+                    Id = reader.GetInt32(0),
+                    Username = reader.GetString(1),
+                    CreatedAt = reader.GetDateTime(2)
+                };
+            }
+            
+            return null;
+        }
+        finally { await connection.CloseAsync(); }
+    }
+
+
+    public async Task<List<PostDisplay>> GetUserPostsAsync(int userId)
+    {
+        var posts = new List<PostDisplay>();
+        
+        try
+        {
+            await connection.OpenAsync();
+            
+            using var command = new SqliteCommand(@"SELECT p.id, u.username, p.content, p.created, p.likes, p.dislikes 
+                                                    FROM posts p 
+                                                    INNER JOIN users u ON p.user_id = u.id 
+                                                    WHERE p.user_id = @userId 
+                                                    AND (p.delete_at IS NULL OR p.delete_at > CURRENT_TIMESTAMP) 
+                                                    ORDER BY p.created DESC", connection);
+            
+            command.Parameters.AddWithValue("@userId", userId);
+            
+            using var reader = await command.ExecuteReaderAsync();
+            
+            while (await reader.ReadAsync())
+            {
+                posts.Add(new PostDisplay
+                {
+                    Id = reader.GetInt32(0),
+                    Username = reader.GetString(1),
+                    Content = reader.GetString(2),
+                    Created = reader.GetDateTime(3),
+                    LikesCount = reader.GetInt32(4),
+                    DislikesCount = reader.GetInt32(5)
+                });
+            }
+            
+            return posts;
+        }
+        finally { await connection.CloseAsync(); }
+    }
+
+
+    public async Task<(int totalLikes, int totalDislikes)> GetUserReactionsAsync(int userId)
+    {
+        try
+        {
+            await connection.OpenAsync();
+            
+            using var cmd = new SqliteCommand(@"SELECT 
+                                                    COUNT(CASE WHEN reaction_type = 1 THEN 1 END) as total_likes,
+                                                    COUNT(CASE WHEN reaction_type = 2 THEN 1 END) as total_dislikes
+                                                FROM post_reactions pr
+                                                INNER JOIN posts p ON pr.post_id = p.id
+                                                WHERE p.user_id = @userId", connection);
+            
+            cmd.Parameters.AddWithValue("@userId", userId);
+            
+            using var reader = await cmd.ExecuteReaderAsync();
+            
+            if (await reader.ReadAsync())
+            {
+                int totalLikes = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
+                int totalDislikes = reader.IsDBNull(1) ? 0 : reader.GetInt32(1);
+                
+                return (totalLikes, totalDislikes);
+            }
+            
+            return (0, 0);
+        }
+        finally { await connection.CloseAsync(); }
+    }
 }

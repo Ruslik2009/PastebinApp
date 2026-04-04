@@ -45,13 +45,19 @@
                             </StackPanel>
                         </ListBoxItem> 
 
+                        <ListBoxItem>
+                            <StackPanel PointerPressed="AccountItem_PointerPressed" HorizontalAlignment="Stretch" Background="Transparent" Spacing="15" Orientation="Horizontal">
+                                <PathIcon Data="{StaticResource person}" Foreground="White"/>
+                                <TextBlock Text="Account" FontSize="15" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                        </ListBoxItem>
+
                         <ListBoxItem > 
                             <StackPanel PointerPressed="ExitItem_PointerPressed" HorizontalAlignment="Stretch" Background="Transparent" Spacing="15" Orientation="Horizontal">
                                 <PathIcon Data="{StaticResource exit}" Foreground="White"/>
                                 <TextBlock Text="Exit" FontSize="15" FontWeight="Bold" Foreground="White"/>
                             </StackPanel>
-                        </ListBoxItem> 
-                        <!-- -->
+                        </ListBoxItem>
                     </ListBox>
 
                 </StackPanel>

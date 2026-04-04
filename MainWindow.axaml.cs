@@ -72,7 +72,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            MainContent.Content = new PostsView();
+            MainContent.Content = new UserProfileView();
         }
     }
 
