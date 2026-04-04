@@ -1,4 +1,41 @@
-[Bb]in/
-[Oo]bj/
+```gitignore
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+*.nupkg
+bin/
+obj/
+out/
+
+# Dependencies
+packages/
+node_modules/
+.nuget/
+
+# IDE
 .vs/
+.idea/
+*.userprefs
+*.userosscache
+*.suo
 *.user
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Test coverage
+coverage/
+htmlcov/
+*.coverage
+```
