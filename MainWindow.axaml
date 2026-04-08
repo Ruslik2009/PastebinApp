@@ -31,12 +31,13 @@
                                 <TextBlock Text="Home" FontSize="15" FontWeight="Bold" Foreground="White" />
                             </StackPanel>
                         </ListBoxItem> 
-                        <!-- <ListBoxItem>
+
+                        <ListBoxItem>
                             <StackPanel PointerPressed="AccountItem_PointerPressed" HorizontalAlignment="Stretch" Background="Transparent" Spacing="15" Orientation="Horizontal">
-                                <PathIcon Data="{StaticResource person}"/>
-                                <TextBlock Text="Account" FontSize="15" FontWeight="Bold"/>
+                                <PathIcon Data="{StaticResource person}" Foreground="White"/>
+                                <TextBlock Text="Account" FontSize="15" FontWeight="Bold" Foreground="White"/>
                             </StackPanel>
-                        </ListBoxItem>  -->
+                        </ListBoxItem> 
 
                         <ListBoxItem>
                             <StackPanel PointerPressed="CreatePostItem_PointerPressed" HorizontalAlignment="Stretch" Background="Transparent" Spacing="15" Orientation="Horizontal" >
