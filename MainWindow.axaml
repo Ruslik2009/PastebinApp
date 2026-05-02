@@ -88,5 +88,6 @@
                 <PathIcon x:Name="MenuIcon" 
                         Data="{StaticResource 3line}"/>
         </Button>
+        <Panel x:Name="NotificationArea" ZIndex="1000" />
     </Grid>
 </Window>

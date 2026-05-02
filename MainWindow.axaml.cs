@@ -14,6 +14,7 @@ using Npgsql.Replication;
 using Tmds.DBus.Protocol;
 
 using Microsoft.Data.Sqlite;
+using Avalonia.Controls.Notifications;
 
 
 namespace PastebinApp;
@@ -22,7 +23,9 @@ public partial class MainWindow : Window
 {
     public static DatabaseService DB { get; private set; }= null!;
     public static int userId;
-    
+
+    private WindowNotificationManager? _notificationManager;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -30,6 +33,13 @@ public partial class MainWindow : Window
 
         //"Host=localhost;Database=pastebinapp_db;Username=postgres"
         //string connectionString = $"Data Source={dbPath};Cache=Shared;Mode=ReadWriteCreate;";
+        _notificationManager = new WindowNotificationManager(this)
+        {
+            Position = NotificationPosition.BottomRight,
+            MaxItems = 3
+        };
+        NotificationArea.Children.Add(_notificationManager); // Прицепляем к панели
+
 
         string dbPath = System.IO.Path.Combine(AppContext.BaseDirectory, "app.db");
         string connectionString = $"Data Source={dbPath};Default Timeout=5;Cache=Shared;Mode=ReadWriteCreate;";
@@ -51,24 +61,30 @@ public partial class MainWindow : Window
     }
 
 
+
+    
     private void HomeItem_PointerPressed(object sender, PointerPressedEventArgs e)
     {
-        if (MainContent.Content is LoginView || MainContent.Content is RegisterView )
+        SplitView.IsPaneOpen = false;
+        if (MainContent.Content is LoginView || MainContent.Content is RegisterView)
         {
-            //Close();
+            _notificationManager?.Show(new Notification("Ошибка:(", "Войдите в аккаунт", NotificationType.Information));
+
         }
         else
         {
             MainContent.Content = new PostsView();
         }
     }
+    
 
 
     private void AccountItem_PointerPressed(object sender, PointerPressedEventArgs e)
     {
+        SplitView.IsPaneOpen = false;
         if (MainContent.Content is LoginView || MainContent.Content is RegisterView )
         {
-            //Close();
+            _notificationManager?.Show(new Notification("Ошибка:(", "Войдите в аккаунт", NotificationType.Information));
         }
         else
         {
@@ -80,9 +96,10 @@ public partial class MainWindow : Window
 
     private void CreatePostItem_PointerPressed(object sender, PointerPressedEventArgs e)
     {
+        SplitView.IsPaneOpen = false;
         if (MainContent.Content is LoginView || MainContent.Content is RegisterView )
         {
-            //Close();
+            _notificationManager?.Show(new Notification("Ошибка:(", "Войдите в аккаунт", NotificationType.Information));
         }
         else
         {
@@ -93,6 +110,7 @@ public partial class MainWindow : Window
 
     private void ExitItem_PointerPressed(object sender, PointerPressedEventArgs e)
     {
+        SplitView.IsPaneOpen = false;
         if (MainContent.Content is LoginView || MainContent.Content is RegisterView )
         {
             Close();

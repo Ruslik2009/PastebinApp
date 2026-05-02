@@ -1,6 +1,7 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia;
+using Avalonia.Input.Platform; 
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
@@ -34,29 +35,30 @@ namespace PastebinApp
             await MainWindow.DB.AddPasteAsync(MainWindow.userId, ContentBox.Text, isPublic, deleteTime, url );
             UrlBox.Text = url;
         }
-
-        private async void CopyButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        
+        private async void CopyButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             string textToCopy = UrlBox.Text ?? string.Empty;
-        
             if (string.IsNullOrWhiteSpace(textToCopy)) return;
         
-            var topLevel = TopLevel.GetTopLevel(this);
-            var clipboard = topLevel?.Clipboard;
+            // В Avalonia 11 доступ к платформенным фишкам идет через TopLevel
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
         
             if (clipboard != null)
             {
                 try 
                 {
                     await clipboard.SetTextAsync(textToCopy);
-                    // Console.WriteLine("Скопировано!");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Ошибка буфера: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Ошибка: {ex.Message}");
                 }
             }
         }
+        
+
+
 
         private void CloseButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
