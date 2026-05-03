@@ -411,4 +411,44 @@ public class DatabaseService
         }
         finally { await connection.CloseAsync(); }
     }
+
+
+    // Метод для удаления поста
+    public async Task<bool> DeletePostAsync(int postId, int userId)
+    {
+        try
+        {
+            await connection.OpenAsync();
+            
+            // Сначала проверяем, что пост принадлежит пользователю
+            using var checkCmd = new SqliteCommand("SELECT COUNT(*) FROM posts WHERE id = @postId AND user_id = @userId", connection);
+            checkCmd.Parameters.AddWithValue("@postId", postId);
+            checkCmd.Parameters.AddWithValue("@userId", userId);
+            
+            var count = Convert.ToInt32(await checkCmd.ExecuteScalarAsync());
+            
+            if (count == 0)
+            {
+                return false; // Пост не найден или не принадлежит пользователю
+            }
+            
+            // Удаляем пост
+            using var deleteCmd = new SqliteCommand("DELETE FROM posts WHERE id = @postId AND user_id = @userId", connection);
+            deleteCmd.Parameters.AddWithValue("@postId", postId);
+            deleteCmd.Parameters.AddWithValue("@userId", userId);
+            
+            await deleteCmd.ExecuteNonQueryAsync();
+            
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"✗ ОШИБКА при удалении поста: {ex.Message}");
+            return false;
+        }
+        finally 
+        { 
+            await connection.CloseAsync(); 
+        }
+    }
 }
