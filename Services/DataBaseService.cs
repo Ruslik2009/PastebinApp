@@ -20,13 +20,13 @@ public class DatabaseService
     }
 
     // Методы для users таблицы
-    public async Task AddUserAsync(string username, string password) 
-    { 
+    public async Task AddUserAsync(string username, string password)
+    {
         try
         {
             await connection.OpenAsync();
 
-            using SqliteCommand command = new SqliteCommand("INSERT INTO users (username, password) " 
+            using SqliteCommand command = new SqliteCommand("INSERT INTO users (username, password) "
                                                            + "VALUES (@username, @password)", connection);
 
             string privatePassword = HashHelper.GenerateSha256(password);
@@ -36,9 +36,9 @@ public class DatabaseService
 
             await command.ExecuteNonQueryAsync();
         }
-        finally 
-        { 
-            await connection.CloseAsync(); 
+        finally
+        {
+            await connection.CloseAsync();
         }
     }
 
@@ -52,7 +52,7 @@ public class DatabaseService
             await connection.OpenAsync();
 
             using SqliteCommand command = new SqliteCommand("SELECT password "
-                                                + "FROM users " 
+                                                + "FROM users "
                                                 + "WHERE username = @username", connection);
 
             command.Parameters.AddWithValue("@username", username);
@@ -64,9 +64,9 @@ public class DatabaseService
 
             return HashHelper.GenerateSha256(password) == pass.ToString();
         }
-        finally 
-        { 
-            await connection.CloseAsync(); 
+        finally
+        {
+            await connection.CloseAsync();
         }
     }
 
@@ -78,15 +78,15 @@ public class DatabaseService
         {
             await connection.OpenAsync();
             using SqliteCommand command = new SqliteCommand("SELECT id "
-                                                + "FROM users " 
+                                                + "FROM users "
                                                 + "WHERE username = @username", connection);
-            
+
             command.Parameters.AddWithValue("@username", username);
             var result = await command.ExecuteScalarAsync();
-    
+
             if (result == null || result == DBNull.Value) { return null; }
-            
-            
+
+
             return Convert.ToInt32(result);
         }
         finally { await connection.CloseAsync(); }
@@ -101,15 +101,15 @@ public class DatabaseService
         try
         {
             await connection.OpenAsync();
-            
+
             using var cmd = new SqliteCommand(@"SELECT id, username, created 
                                                 FROM users 
                                                 WHERE id = @userId", connection);
-            
+
             cmd.Parameters.AddWithValue("@userId", userId);
-            
+
             using var reader = await cmd.ExecuteReaderAsync();
-            
+
             if (await reader.ReadAsync())
             {
                 return new UserProfile
@@ -119,7 +119,7 @@ public class DatabaseService
                     CreatedAt = reader.GetDateTime(2)
                 };
             }
-            
+
             return null;
         }
         finally { await connection.CloseAsync(); }
@@ -129,22 +129,22 @@ public class DatabaseService
     public async Task<List<PostDisplay>> GetUserPostsAsync(int userId)
     {
         var posts = new List<PostDisplay>();
-        
+
         try
         {
             await connection.OpenAsync();
-            
+
             using var command = new SqliteCommand(@"SELECT p.id, u.username, p.content, p.created, p.likes, p.dislikes 
                                                     FROM posts p 
                                                     INNER JOIN users u ON p.user_id = u.id 
                                                     WHERE p.user_id = @userId 
                                                     AND (p.delete_at IS NULL OR p.delete_at > CURRENT_TIMESTAMP) 
                                                     ORDER BY p.created DESC", connection);
-            
+
             command.Parameters.AddWithValue("@userId", userId);
-            
+
             using var reader = await command.ExecuteReaderAsync();
-            
+
             while (await reader.ReadAsync())
             {
                 posts.Add(new PostDisplay
@@ -157,7 +157,7 @@ public class DatabaseService
                     DislikesCount = reader.GetInt32(5)
                 });
             }
-            
+
             return posts;
         }
         finally { await connection.CloseAsync(); }
@@ -169,39 +169,39 @@ public class DatabaseService
         try
         {
             await connection.OpenAsync();
-            
+
             using var cmd = new SqliteCommand(@"SELECT 
                                                     COUNT(CASE WHEN reaction_type = 1 THEN 1 END) as total_likes,
                                                     COUNT(CASE WHEN reaction_type = 2 THEN 1 END) as total_dislikes
                                                 FROM post_reactions pr
                                                 INNER JOIN posts p ON pr.post_id = p.id
                                                 WHERE p.user_id = @userId", connection);
-            
+
             cmd.Parameters.AddWithValue("@userId", userId);
-            
+
             using var reader = await cmd.ExecuteReaderAsync();
-            
+
             if (await reader.ReadAsync())
             {
                 int totalLikes = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
                 int totalDislikes = reader.IsDBNull(1) ? 0 : reader.GetInt32(1);
-                
+
                 return (totalLikes, totalDislikes);
             }
-            
+
             return (0, 0);
         }
         finally { await connection.CloseAsync(); }
-    }   
+    }
     // Метод для pastes таблицы  
 
     public async Task AddPasteAsync(int user_id, string content, bool is_public, DateTime? delete_at, string url)
-    { 
+    {
         try
         {
             await connection.OpenAsync();
             // Меняем команду на SqliteCommand
-            using SqliteCommand command = new SqliteCommand("INSERT INTO posts (user_id, content, is_public, delete_at, url) " 
+            using SqliteCommand command = new SqliteCommand("INSERT INTO posts (user_id, content, is_public, delete_at, url) "
                                                            + "VALUES (@user_id, @content, @is_public, @delete_at, @url)", connection);
 
             command.Parameters.AddWithValue("@user_id", user_id);
@@ -212,31 +212,31 @@ public class DatabaseService
 
             await command.ExecuteNonQueryAsync();
         }
-        finally 
-        { 
-            await connection.CloseAsync(); 
+        finally
+        {
+            await connection.CloseAsync();
         }
     }
 
 
 
     public async Task<List<PostDisplay>> GetPostsAsync()
-    { 
+    {
         var posts = new List<PostDisplay>();
 
         try
         {
             await connection.OpenAsync();
 
-            
+
             using var deleteCmd = new SqliteCommand("DELETE FROM posts WHERE delete_at IS NOT NULL AND delete_at <= CURRENT_TIMESTAMP", connection);
             await deleteCmd.ExecuteNonQueryAsync();
 
-            
+
             using var command = new SqliteCommand("SELECT p.id, u.username, p.content, p.created, p.likes, p.dislikes "
                                                + "FROM posts p "
                                                + "INNER JOIN users u ON p.user_id = u.id "
-                                               + "WHERE p.is_public = 1 " 
+                                               + "WHERE p.is_public = 1 "
                                                + "AND (p.delete_at IS NULL OR p.delete_at > CURRENT_TIMESTAMP) "
                                                + "ORDER BY p.created DESC", connection);
 
@@ -262,15 +262,15 @@ public class DatabaseService
 
 
     public async Task<PostDisplay?> SearchPasteAsync(string url)
-    { 
+    {
         try
         {
             await connection.OpenAsync();
-            
-            using var command = new SqliteCommand("SELECT p.id, u.username, p.content, p.created, p.likes, p.dislikes  " 
-                                                   + "FROM posts p " 
-                                                   + "INNER JOIN users u ON p.user_id = u.id " 
-                                                   + "WHERE p.url = @url " 
+
+            using var command = new SqliteCommand("SELECT p.id, u.username, p.content, p.created, p.likes, p.dislikes  "
+                                                   + "FROM posts p "
+                                                   + "INNER JOIN users u ON p.user_id = u.id "
+                                                   + "WHERE p.url = @url "
                                                    + "AND (p.delete_at IS NULL OR p.delete_at > CURRENT_TIMESTAMP)", connection);
 
             command.Parameters.AddWithValue("@url", url);
@@ -281,7 +281,7 @@ public class DatabaseService
             {
                 return new PostDisplay
                 {
-                    Id = reader.GetInt32(0), 
+                    Id = reader.GetInt32(0),
                     Username = reader.GetString(1),
                     Content = reader.GetString(2),
                     Created = reader.GetDateTime(3),
@@ -300,9 +300,9 @@ public class DatabaseService
     public async Task<(int likes, int dislikes, int? userReaction)> ToggleReactionAsync(int postId, int userId, int reactionType)
     {
         try
-        {   
+        {
             await connection.OpenAsync();
-            
+
             using var transaction = (SqliteTransaction)await connection.BeginTransactionAsync();
 
             // Проверяем существующую реакцию
@@ -327,7 +327,7 @@ public class DatabaseService
                 deleteCmd.Parameters.AddWithValue("@user_id", userId);
                 await deleteCmd.ExecuteNonQueryAsync();
                 reactionType = 0;
-            } 
+            }
             else
             {
                 using var updateCmd = new SqliteCommand("UPDATE post_reactions SET reaction_type = @reaction_type WHERE post_id = @post_id AND user_id = @user_id", connection, transaction);
@@ -370,17 +370,17 @@ public class DatabaseService
             Console.WriteLine($"✗ ОШИБКА: {ex.Message}");
             throw;
         }
-        finally 
-        { 
-            await connection.CloseAsync(); 
+        finally
+        {
+            await connection.CloseAsync();
         }
     }
 
-    
+
     public async Task<(int? userReaction, int likes, int dislikes)> GetPostStatsAsync(int? postId, int? userId)
     {
         try
-        {    
+        {
             await connection.OpenAsync();
 
             using var cmd = new SqliteCommand(@"SELECT p.likes, p.dislikes, 
@@ -389,7 +389,7 @@ public class DatabaseService
                                                 FROM posts p
                                                 WHERE p.id = @postId", connection);
 
-           
+
             cmd.Parameters.AddWithValue("@postId", postId ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@userId", userId ?? (object)DBNull.Value);
 
@@ -405,6 +405,34 @@ public class DatabaseService
             }
 
             return (null, 0, 0);
+        }
+        finally { await connection.CloseAsync(); }
+    }
+
+    public async Task<bool> DeletePostAsync(int postId, int userId)
+    {
+        try
+        {
+            await connection.OpenAsync();
+
+            // удаляем реакции на этот пост
+            using (var cmd = new SqliteCommand(@"DELETE FROM post_reactions
+                                                WHERE post_id = @postId", connection))
+            {
+                cmd.Parameters.AddWithValue("@postId", postId);
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+            // удаляем пост
+            using (var cmd = new SqliteCommand(@"DELETE FROM posts
+                                                WHERE id = @postId AND user_id = @userId", connection))
+            {
+                cmd.Parameters.AddWithValue("@postId", postId);
+                cmd.Parameters.AddWithValue("@userId", userId);
+
+                var rowsAffected = await cmd.ExecuteNonQueryAsync();
+                return rowsAffected > 0;
+            }
         }
         finally { await connection.CloseAsync(); }
     }

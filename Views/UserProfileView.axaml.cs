@@ -1,5 +1,7 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -44,5 +46,28 @@ namespace PastebinApp
             // Устанавливаем DataContext для привязки
             DataContext = _profile;
         }
+
+
+        private async void DeletePost_Click(object? sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button || button.Tag is not int postId)
+                return;
+
+            if (!await MainWindow.DB.DeletePostAsync(postId, MainWindow.userId))
+                return;
+
+            //обновляем список постов ui
+            var postToRemove = _posts.FirstOrDefault(p => p.Id == postId);
+            if (postToRemove != null)
+            {
+                _posts.Remove(postToRemove);
+                
+                // Обновляем статистику профиля
+                _profile!.PostsCount = _posts.Count;
+                _profile!.TotalLikes -= postToRemove.LikesCount;     
+                _profile!.TotalDislikes -= postToRemove.DislikesCount; 
+            }
+        }
+
     }
 }

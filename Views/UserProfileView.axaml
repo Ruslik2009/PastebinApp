@@ -1,195 +1,224 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:PastebinApp"
-             x:Class="PastebinApp.UserProfileView"
-             x:DataType="local:UserProfile">
-    
- <Grid Background="#1E1E1E">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!-- Информация о пользователе -->
-        <Border Grid.Row="0" 
-                Background="#252526" 
-                Margin="20,20,20,10" 
-                Padding="20" 
-                CornerRadius="10"
-                BorderBrush="#3E3E40"
-                BorderThickness="1">
-            <StackPanel>
-                <TextBlock Text="Профиль пользователя" 
-                           FontWeight="Bold" 
-                           Foreground="#FFFFFF"
-                           FontSize="20"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,15"/>
-                
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Имя:" 
-                               FontWeight="Bold"
-                               Foreground="#A0A0A0"
-                               FontSize="14"
-                               Grid.Row="0" Grid.Column="0"
-                               Margin="0,0,15,10"/>
-                    <TextBlock Text="{Binding Username}" 
-                               Foreground="#FFFFFF"
-                               FontSize="14"
-                               Grid.Row="0" Grid.Column="1"
-                               Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Дата регистрации:" 
-                               FontWeight="Bold"
-                               Foreground="#A0A0A0"
-                               FontSize="14"
-                               Grid.Row="1" Grid.Column="0"
-                               Margin="0,0,15,10"/>
-                    <TextBlock Text="{Binding CreatedAt, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
-                               Foreground="#FFFFFF"
-                               FontSize="14"
-                               Grid.Row="1" Grid.Column="1"
-                               Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Всего постов:" 
-                               FontWeight="Bold"
-                               Foreground="#A0A0A0"
-                               FontSize="14"
-                               Grid.Row="2" Grid.Column="0"
-                               Margin="0,0,15,10"/>
-                    <TextBlock Text="{Binding PostsCount}" 
-                               Foreground="#FFFFFF"
-                               FontSize="14"
-                               Grid.Row="2" Grid.Column="1"
-                               Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Общие лайки:" 
-                               FontWeight="Bold"
-                               Foreground="#A0A0A0"
-                               FontSize="14"
-                               Grid.Row="3" Grid.Column="0"
-                               Margin="0,0,15,10"/>
-                    <TextBlock Text="{Binding TotalLikes}" 
-                               Foreground="#4CAF50"
-                               FontSize="14"
-                               Grid.Row="3" Grid.Column="1"
-                               Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Общие дизлайки:" 
-                               FontWeight="Bold"
-                               Foreground="#A0A0A0"
-                               FontSize="14"
-                               Grid.Row="4" Grid.Column="0"
-                               Margin="0,0,15,0"/>
-                    <TextBlock Text="{Binding TotalDislikes}" 
-                               Foreground="#F44336"
-                               FontSize="14"
-                               Grid.Row="4" Grid.Column="1"
-                               Margin="0,0,0,0"/>
-                </Grid>
-            </StackPanel>
-        </Border>
-
-        <!-- Список постов пользователя -->
-        <Border Grid.Row="1" 
-                Background="#252526" 
-                Margin="20,10,20,20" 
-                Padding="20" 
-                CornerRadius="10"
-                BorderBrush="#3E3E40"
-                BorderThickness="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Text="Посты пользователя" 
-                           FontWeight="Bold" 
-                           Foreground="#FFFFFF"
-                           FontSize="18"
-                           Margin="0,0,0,15"
-                           Grid.Row="0"/>
-
-                <ListBox x:Name="PostsList" Grid.Row="1"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         Background="Transparent">
-
-                    <ListBox.Styles>
-                        <Style Selector="ListBoxItem">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                        </Style>
-                        <Style Selector="ListBoxItem:selected">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Style>
-                        <Style Selector="ListBoxItem:focus">
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Style>
-                    </ListBox.Styles>
-
-                    <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="local:PostDisplay">
-                            <Border Background="#2D2D30" 
-                                    Margin="0,0,0,10" 
-                                    Padding="15" 
-                                    CornerRadius="8"
-                                    BorderBrush="#3E3E40"
-                                    BorderThickness="1">
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Content}" 
-                                               Foreground="#E0E0E0"
-                                               FontSize="14"
-                                               TextWrapping="Wrap"
-                                               Margin="0,0,0,8"/>
-                                    
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,15,0">
-                                            <PathIcon Data="{StaticResource like}" 
-                                                      Width="16" Height="16" 
-                                                      Margin="0,0,5,0"
-                                                      Foreground="#4CAF50"/>
-                                            <TextBlock Text="{Binding LikesCount}" 
-                                                       FontSize="12" 
-                                                       VerticalAlignment="Center"
-                                                       Foreground="#4CAF50"/>
-                                        </StackPanel>
-                                        
-                                        <StackPanel Orientation="Horizontal">
-                                            <PathIcon Data="{StaticResource dislike}" 
-                                                      Width="16" Height="16" 
-                                                      Margin="0,0,5,0"
-                                                      Foreground="#F44336"/>
-                                            <TextBlock Text="{Binding DislikesCount}" 
-                                                       FontSize="12" 
-                                                       VerticalAlignment="Center"
-                                                       Foreground="#F44336"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                    
-                                    <TextBlock Text="{Binding Created, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
-                                               Foreground="#A0A0A0"
-                                               FontSize="12"
-                                               HorizontalAlignment="Right"
-                                               Margin="0,8,0,0"/>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-        </Border>
-    </Grid>
-</UserControl>
+	             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	             xmlns:local="clr-namespace:PastebinApp"
+	             x:Class="PastebinApp.UserProfileView"
+	             x:DataType="local:UserProfile">
+	    
+	 <Grid Background="#1E1E1E">
+	        <Grid.RowDefinitions>
+	            <RowDefinition Height="Auto"/>
+	            <RowDefinition Height="*"/>
+	        </Grid.RowDefinitions>
+	
+	        <!-- Информация о пользователе -->
+	        <Border Grid.Row="0" 
+	                Background="#252526" 
+	                Margin="20,20,20,10" 
+	                Padding="20" 
+	                CornerRadius="10"
+	                BorderBrush="#3E3E40"
+	                BorderThickness="1">
+	            <StackPanel>
+	                <TextBlock Text="Профиль пользователя" 
+	                           FontWeight="Bold" 
+	                           Foreground="#FFFFFF"
+	                           FontSize="20"
+	                           HorizontalAlignment="Center"
+	                           Margin="0,0,0,15"/>
+	                
+	                <Grid>
+	                    <Grid.ColumnDefinitions>
+	                        <ColumnDefinition Width="Auto"/>
+	                        <ColumnDefinition Width="*"/>
+	                    </Grid.ColumnDefinitions>
+	                    <Grid.RowDefinitions>
+	                        <RowDefinition Height="Auto"/>
+	                        <RowDefinition Height="Auto"/>
+	                        <RowDefinition Height="Auto"/>
+	                        <RowDefinition Height="Auto"/>
+	                        <RowDefinition Height="Auto"/>
+	                    </Grid.RowDefinitions>
+	
+	                    <TextBlock Text="Имя:" 
+	                               FontWeight="Bold"
+	                               Foreground="#A0A0A0"
+	                               FontSize="14"
+	                               Grid.Row="0" Grid.Column="0"
+	                               Margin="0,0,15,10"/>
+	                    <TextBlock Text="{Binding Username}" 
+	                               Foreground="#FFFFFF"
+	                               FontSize="14"
+	                               Grid.Row="0" Grid.Column="1"
+	                               Margin="0,0,0,10"/>
+	
+	                    <TextBlock Text="Дата регистрации:" 
+	                               FontWeight="Bold"
+	                               Foreground="#A0A0A0"
+	                               FontSize="14"
+	                               Grid.Row="1" Grid.Column="0"
+	                               Margin="0,0,15,10"/>
+	                    <TextBlock Text="{Binding CreatedAt, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
+	                               Foreground="#FFFFFF"
+	                               FontSize="14"
+	                               Grid.Row="1" Grid.Column="1"
+	                               Margin="0,0,0,10"/>
+	
+	                    <TextBlock Text="Всего постов:" 
+	                               FontWeight="Bold"
+	                               Foreground="#A0A0A0"
+	                               FontSize="14"
+	                               Grid.Row="2" Grid.Column="0"
+	                               Margin="0,0,15,10"/>
+	                    <TextBlock Text="{Binding PostsCount}" 
+	                               Foreground="#FFFFFF"
+	                               FontSize="14"
+	                               Grid.Row="2" Grid.Column="1"
+	                               Margin="0,0,0,10"/>
+	
+	                    <TextBlock Text="Общие лайки:" 
+	                               FontWeight="Bold"
+	                               Foreground="#A0A0A0"
+	                               FontSize="14"
+	                               Grid.Row="3" Grid.Column="0"
+	                               Margin="0,0,15,10"/>
+	                    <TextBlock Text="{Binding TotalLikes}" 
+	                               Foreground="#4CAF50"
+	                               FontSize="14"
+	                               Grid.Row="3" Grid.Column="1"
+	                               Margin="0,0,0,10"/>
+	
+	                    <TextBlock Text="Общие дизлайки:" 
+	                               FontWeight="Bold"
+	                               Foreground="#A0A0A0"
+	                               FontSize="14"
+	                               Grid.Row="4" Grid.Column="0"
+	                               Margin="0,0,15,0"/>
+	                    <TextBlock Text="{Binding TotalDislikes}" 
+	                               Foreground="#F44336"
+	                               FontSize="14"
+	                               Grid.Row="4" Grid.Column="1"
+   	                               Margin="0,0,0,0"/>
+   	                </Grid>
+   	            </StackPanel>
+   	        </Border>
+   	
+   	        <!-- Список постов пользователя -->
+   	        <Border Grid.Row="1" 
+   	                Background="#252526" 
+   	                Margin="20,10,20,20" 
+   	                Padding="20" 
+   	                CornerRadius="10"
+   	                BorderBrush="#3E3E40"
+   	                BorderThickness="1">
+   	            <Grid>
+   	                <Grid.RowDefinitions>
+   	                    <RowDefinition Height="Auto"/>
+   	                    <RowDefinition Height="*"/>
+   	                </Grid.RowDefinitions>
+   	
+   	                <TextBlock Text="Посты пользователя" 
+   	                           FontWeight="Bold" 
+   	                           Foreground="#FFFFFF"
+   	                           FontSize="18"
+   	                           Margin="0,0,0,15"
+   	                           Grid.Row="0"/>
+   	
+   	                <ListBox x:Name="PostsList" Grid.Row="1"
+   	                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+   	                         Background="Transparent">
+   	
+   	                    <ListBox.Styles>
+   	                        <Style Selector="ListBoxItem">
+   	                            <Setter Property="Background" Value="Transparent"/>
+   	                            <Setter Property="BorderThickness" Value="0"/>
+   	                        </Style>
+   	                        <Style Selector="ListBoxItem:selected">
+   	                            <Setter Property="Background" Value="Transparent"/>
+   	                        </Style>
+   	                        <Style Selector="ListBoxItem:focus">
+   	                            <Setter Property="Background" Value="Transparent"/>
+   	                        </Style>
+   	                    </ListBox.Styles>
+   	
+   	                    <ListBox.ItemTemplate>
+   	                        <DataTemplate x:DataType="local:PostDisplay">
+   	                            <Border Background="#2D2D30" 
+   	                                    Margin="0,0,0,10" 
+   	                                    Padding="15" 
+   	                                    CornerRadius="8"
+   	                                    BorderBrush="#3E3E40"
+   	                                    BorderThickness="1">
+   	                                <Grid>
+   	                                    <Grid.RowDefinitions>
+   	                                        <RowDefinition Height="Auto"/>
+   	                                        <RowDefinition Height="Auto"/>
+   	                                        <RowDefinition Height="Auto"/>
+   	                                    </Grid.RowDefinitions>
+   	                                    
+   	                                    <TextBlock Text="{Binding Content}" 
+   	                                               Foreground="#E0E0E0"
+   	                                               FontSize="14"
+   	                                               TextWrapping="Wrap"
+   	                                               Margin="0,0,0,8"
+   	                                               Grid.Row="0"/>
+   	                                    
+   	                                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+   	                                        <StackPanel Orientation="Horizontal" Margin="0,0,15,0">
+   	                                            <PathIcon Data="{StaticResource like}" 
+   	                                                      Width="16" Height="16" 
+   	                                                      Margin="0,0,5,0"
+   	                                                      Foreground="#4CAF50"/>
+   	                                            <TextBlock Text="{Binding LikesCount}" 
+   	                                                       FontSize="12" 
+   	                                                       VerticalAlignment="Center"
+   	                                                       Foreground="#4CAF50"/>
+   	                                        </StackPanel>
+   	                                        
+   	                                        <StackPanel Orientation="Horizontal">
+   	                                            <PathIcon Data="{StaticResource dislike}" 
+   	                                                      Width="16" Height="16" 
+   	                                                      Margin="0,0,5,0"
+   	                                                      Foreground="#F44336"/>
+   	                                            <TextBlock Text="{Binding DislikesCount}" 
+   	                                                       FontSize="12" 
+   	                                                       VerticalAlignment="Center"
+   	                                                       Foreground="#F44336"/>
+   	                                        </StackPanel>
+   	                                    </StackPanel>
+   	                                    
+   	                                    <Grid Grid.Row="2" Margin="0,8,0,0">
+   	                                        <Grid.ColumnDefinitions>
+   	                                            <ColumnDefinition Width="*"/>
+   	                                            <ColumnDefinition Width="Auto"/>
+   	                                        </Grid.ColumnDefinitions>
+   	                                        
+   	                                        <TextBlock Text="{Binding Created, StringFormat={}{0:dd.MM.yyyy HH:mm}}" 
+   	                                                   Foreground="#A0A0A0"
+   	                                                   FontSize="12"
+   	                                                   VerticalAlignment="Center"/>
+                                            <Button Grid.Column="1" 
+                                                    Click="DeletePost_Click"
+                                                    Tag="{Binding Id}"
+                                                    Background="Transparent"
+                                                    Foreground="#F44336"
+                                                    Padding="6,3"
+                                                    CornerRadius="3"
+                                                    Margin="10,0,0,0"
+                                                    MinWidth="0"
+                                                    MinHeight="0"
+                                                    Height="28">
+                                                <PathIcon Data="{StaticResource delete_icon}" 
+                                                          Width="14" 
+                                                          Height="14" 
+                                                          Foreground="White"/>
+                                            </Button>
+   	                                    </Grid>
+   	                                </Grid>
+   	                            </Border>
+   	                        </DataTemplate>
+   	                    </ListBox.ItemTemplate>
+   	                </ListBox>
+   	            </Grid>
+   	        </Border>
+   	    </Grid>
+   	</UserControl>
