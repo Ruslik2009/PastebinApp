@@ -57,5 +57,4 @@
 
 1. **Клонируйте репозиторий:**
    ```bash
-   git clone https://github.com/Ruslik2009/PastebinApp.git
-   cd PastebinApp2
+   git clone https://github.com/Ruslik404/PastebinApp.git
